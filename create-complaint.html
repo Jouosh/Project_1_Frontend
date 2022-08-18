@@ -15,7 +15,7 @@
 
     <form action = "" method = "post">
         <fieldset>
-            <legend>Complaint Information</legend>
+            <legend>Complaint Information:</legend>
             
             <label for = "inputDescription">Description</label>
             <input id = "inputDescription" type = "text" required minlength = "5" maxlength="500"/>
@@ -24,5 +24,34 @@
     </form>
 
 </body>
+<script>
+
+    const inputDescription = document.getElementById("inputDescription");
+
+    document.addEventListener("submit", async event => {
+
+        event.preventDefault();
+        
+        const description = inputDescription.value;
+        const complaint = {complaintId: 0, description, meeting: -1, status: "PENDING"};
+
+        const responses = await fetch("http://localhost:8080/complaint", {
+            method:"POST",
+            body: JSON.stringify(complaint),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (responses.status === 201) {
+            alert("Successfully created a complaint!");
+            inputDescription.value = "";
+        } else {
+            alert("Something went wrong");
+        }
+
+    });
+
+</script>
 
 </html>
