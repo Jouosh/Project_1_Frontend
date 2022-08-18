@@ -10,5 +10,61 @@
     
     <h1>View All Meetings Here!</h1>
 
+    <table>
+
+        <thead>
+            <tr><th>ID</th><th>Description</th><th>Place</th><th>time</th></tr>
+        </thead>
+
+        <tbody id = "meetingTableBody">
+
+        </tbody>
+
+    </table>
+
 </body>
+
+<script>
+
+    const meetingTableBody = document.getElementById("meetingTableBody");
+
+    async function getMeetings() {
+        const httpResponse = await fetch("http://localhost:8080/meeting");
+        const meetings = httpResponse.json();
+        return meetings;
+    }
+
+    async function renderMeetingTable() {
+
+        const meetings = await getMeetings();
+
+        for (const meeting of meetings) {
+
+            const meetingRow = document.createElement("tr");
+
+            const meetingIdData = document.createElement("td");
+            meetingIdData.innerText = meeting.meetingId;
+
+            const meetingDescriptionData = document.createElement("td");
+            meetingDescriptionData.innerText = meeting.description;
+
+            const meetingPlaceData = document.createElement("td");
+            meetingPlaceData.innerText = meeting.place;
+
+            const meetingTimeData = document.createElement("td");
+            meetingTimeData.innerText = meeting.time;
+
+            meetingRow.appendChild(meetingIdData);
+            meetingRow.appendChild(meetingDescriptionData);
+            meetingRow.appendChild(meetingPlaceData);
+            meetingRow.appendChild(meetingTimeData);
+
+            meetingTableBody.appendChild(meetingRow);
+        }
+
+    }
+
+    renderMeetingTable();
+
+</script>
 </html>
