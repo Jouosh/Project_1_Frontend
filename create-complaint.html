@@ -14,7 +14,13 @@
     <h1>Register Your Complaint Here!</h1>
 
     <form action = "" method = "post">
-
+        <fieldset>
+            <legend>Complaint Information</legend>
+            
+            <label for = "inputDescription">Description</label>
+            <input id = "inputDescription" type = "text" required minlength = "5" maxlength="500"/>
+        </fieldset>
+        <button id = "submitBtn">Submit</button>
     </form>
 
 </body>
