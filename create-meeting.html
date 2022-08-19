@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Away</title>
+</head>
+
+<body>
+    
+    <h1>Register Your Meeting Here!</h1>
+
+    <form action = "" method = "post">
+        <fieldset>
+            <legend>Meeting Information:</legend>
+            
+            <label for = "inputDescription">Description</label>
+            <input id = "inputDescription" type = "text" required minlength = "5" maxlength="500"/>
+
+            <label for = "inputPlace">Place</label>
+            <input id = "inputPlace" type = "text" required minlength = "5" maxlength="500"/>
+
+            <label for = "inputTime">Time</label>
+            <input id = "inputTime" type = "number" required min = 0/>
+        </fieldset>
+        <button id>Submit</button>
+    </form>
+
+</body>
+<script>
+
+    const inputDescription = document.getElementById("inputDescription");
+    const inputPlace = document.getElementById("inputPlace");
+    const inputTime = document.getElementById("inputTime");
+
+    document.addEventListener("submit", async event => {
+
+        event.preventDefault();
+        
+        const description = inputDescription.value;
+        const place = inputPlace.value;
+        const time = inputTime.value;
+
+        const meeting = {complaintId: 0, description, place, time};
+
+        const responses = await fetch("http://localhost:8080/meeting", {
+            method:"POST",
+            body: JSON.stringify(meeting),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (responses.status === 201) {
+            alert("Successfully created a meeting!");
+            inputDescription.value = "";
+            inputPlace.value = "";
+            inputTime.value = "";
+        } else {
+            alert("Something went wrong");
+        }
+
+    });
+
+</script>
+
+</html>
