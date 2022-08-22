@@ -14,8 +14,8 @@
 
     <h1>Update Your Complaints Status Here!</h1>
 
-    <lablel for = "complaintInputDatalist">Id like to set complaint number: </lablel>
-    <input type = "number" list = "complaintInputDatalist" />
+    <lablel for = "complaintIdInput">Id like to set complaint number: </lablel>
+    <input id = "complaintIdInput" type = "number" list = "complaintInputDatalist" />
     <datalist id = "complaintInputDatalist">
 
     </datalist>
@@ -49,6 +49,8 @@ const complaintTableBody = document.getElementById("complaintTableBody");
 const complaintInputDatalist = document.getElementById("complaintInputDatalist");
 
 const updateBtn = document.getElementById("updateBtn");
+const complaintIdInput = document.getElementById("complaintIdInput");
+const statusSelect = document.getElementById("statusSelect");
 
 async function getComplaints() {
     const httpResponse = await fetch("http://localhost:8080/complaints");
@@ -94,7 +96,27 @@ renderComplaintTable();
 
 updateBtn.addEventListener("click", async (event) => {
 
-    
+    const complaintId = String(complaintIdInput.value);
+    const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
+    const httpGetResponse = await fetch(complaintRoute);
+    const complaint = await httpGetResponse.json();
+
+    if (httpGetResponse.status === 404) {
+        alert("No complaint with id of " + complaintId + " exists.");
+        return;
+    }
+
+    complaint.status = statusSelect.value;
+    const httpUpdateResponse = await fetch(complaintRoute, {
+        method:"PUT",
+        body: JSON.stringify(complaint),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    alert("update complete");
+    location.reload();
 
 });
 
