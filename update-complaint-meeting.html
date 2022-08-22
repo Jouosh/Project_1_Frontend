@@ -7,12 +7,20 @@
     <title>See The Meets</title>
 </head>
 <body>
+
+    <h1>Attach Meetings to Complaints Here</h1>
     
     <label for = "complaintIdInput">I'd like to attach complaint: </label>
-    <input id = "complaintIdInput" type = "number" />
+    <input id = "complaintIdInput" type = "number" list = "complaintInputDatalist" />
+    <datalist id = "complaintInputDatalist">
+
+    </datalist>
 
     <label for = "meetingIdInput">To meeting: </label>
-    <input id = "meetingIdInput" type = "number" />
+    <input id = "meetingIdInput" type = "number" list = "meetingInputDatalist" />
+    <datalist id = "meetingInputDatalist">
+
+    </datalist>
 
     <button id = "updateBtn">Submit</button>
 
@@ -48,7 +56,9 @@
 
     //Get needed elements to render tables
     const meetingTableBody = document.getElementById("meetingTableBody");
+    const meetingInputDatalist = document.getElementById("meetingInputDatalist");
     const complaintTableBody = document.getElementById("complaintTableBody");
+    const complaintInputDatalist = document.getElementById("complaintInputDatalist");
 
     //Get needed elements to perform update
     const complaintIdInput = document.getElementById("complaintIdInput");
@@ -68,6 +78,11 @@
         const complaints = await getComplaints();
 
         for (const complaint of complaints) {
+
+            //create an option for input, and append to datalist
+            const complaintIdOption = document.createElement("option");
+            complaintIdOption.value = complaint.complaintId;
+            complaintInputDatalist.appendChild(complaintIdOption);
 
             //append all complaint data to row, append row to table
             const complaintRow = document.createElement("tr");
@@ -107,6 +122,11 @@
         const meetings = await getMeetings();
 
         for (const meeting of meetings) {
+
+            //create an option for input, and append to datalist
+            const meetingIdOption = document.createElement("option");
+            meetingIdOption.value = meeting.meetingId;
+            meetingInputDatalist.appendChild(meetingIdOption);
 
             //Append all meeting data to row, append row to table
             const meetingRow = document.createElement("tr");
