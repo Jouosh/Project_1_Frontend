@@ -1,31 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Update</title>
-
+    <title>See The Meets</title>
 </head>
-
 <body>
+    
+    <label for = "complaintIdInput">I'd like to attach complaint: </label>
+    <input id = "complaintIdInput" type = "number" />
 
-    <h1>Update Your Complaints Status Here!</h1>
-
-    <lablel for = "complaintIdInput">Id like to set complaint number: </lablel>
-    <input id = "complaintIdInput" type = "number" list = "complaintInputDatalist" />
-    <datalist id = "complaintInputDatalist">
-
-    </datalist>
-
-    <label for = "statusSelect">to the status: </label>
-    <select id = "statusSelect" name = "Status">
-        <option value = "IGNORED">Ignored</option>
-        <option value = "LOWPRIORITY">Low Priority</option>
-        <option value = "HIGHPRIORITY">High Priority</option>
-    </select>
+    <label for = "meetingIdInput">To meeting: </label>
+    <input id = "meetingIdInput" type = "number" />
 
     <button id = "updateBtn">Submit</button>
 
@@ -41,16 +28,30 @@
         </tbody>
 
     </table>
+
+    <label for = "meetingTable">List of meetings</label>
+    <table id = "meetingTable">
+
+        <thead>
+            <tr><th>ID</th><th>Description</th><th>Place</th><th>time</th></tr>
+        </thead>
+
+        <tbody id = "meetingTableBody">
+
+        </tbody>
+
+    </table>
+
 </body>
 
 <script>
 
+    const meetingTableBody = document.getElementById("meetingTableBody");
     const complaintTableBody = document.getElementById("complaintTableBody");
-    const complaintInputDatalist = document.getElementById("complaintInputDatalist");
 
-    const updateBtn = document.getElementById("updateBtn");
     const complaintIdInput = document.getElementById("complaintIdInput");
-    const statusSelect = document.getElementById("statusSelect");
+    const meetingIdInput = document.getElementById("meetingIdInput");
+    const updateBtn = document.getElementById("updateBtn");
 
     async function getComplaints() {
         const httpResponse = await fetch("http://localhost:8080/complaints");
@@ -63,10 +64,6 @@
         const complaints = await getComplaints();
 
         for (const complaint of complaints) {
-
-            const complaintIdOption = document.createElement("option");
-            complaintIdOption.value = complaint.complaintId;
-            complaintInputDatalist.appendChild(complaintIdOption);
 
             const complaintRow = document.createElement("tr");
 
@@ -92,7 +89,41 @@
 
     }
 
-    renderComplaintTable();
+    async function getMeetings() {
+        const httpResponse = await fetch("http://localhost:8080/meetings");
+        const meetings = httpResponse.json();
+        return meetings;
+    }
+
+    async function renderMeetingTable() {
+
+        const meetings = await getMeetings();
+
+        for (const meeting of meetings) {
+
+            const meetingRow = document.createElement("tr");
+
+            const meetingIdData = document.createElement("td");
+            meetingIdData.innerText = meeting.meetingId;
+
+            const meetingDescriptionData = document.createElement("td");
+            meetingDescriptionData.innerText = meeting.description;
+
+            const meetingPlaceData = document.createElement("td");
+            meetingPlaceData.innerText = meeting.place;
+
+            const meetingTimeData = document.createElement("td");
+            meetingTimeData.innerText = meeting.time;
+
+            meetingRow.appendChild(meetingIdData);
+            meetingRow.appendChild(meetingDescriptionData);
+            meetingRow.appendChild(meetingPlaceData);
+            meetingRow.appendChild(meetingTimeData);
+
+            meetingTableBody.appendChild(meetingRow);
+        }
+
+    }
 
     updateBtn.addEventListener("click", async (event) => {
 
@@ -106,7 +137,7 @@
             return;
         }
 
-        complaint.status = statusSelect.value;
+        complaint.meeting = meetingIdInput.value;
         const httpUpdateResponse = await fetch(complaintRoute, {
             method:"PUT",
             body: JSON.stringify(complaint),
@@ -118,8 +149,10 @@
         alert("update complete");
         location.reload();
 
-});
+    });
 
+    renderComplaintTable();
+    renderMeetingTable();
 
 </script>
 </html>
