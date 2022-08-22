@@ -26,8 +26,10 @@
 
 <script>
 
+    //Get needed element
     const meetingTableBody = document.getElementById("meetingTableBody");
 
+    //Function for getting json of all meetings
     async function getMeetings() {
         const httpResponse = await fetch("http://localhost:8080/meetings");
         const meetings = httpResponse.json();
@@ -36,10 +38,12 @@
 
     async function renderMeetingTable() {
 
+        //put result of get into meetings and iterate through
         const meetings = await getMeetings();
 
         for (const meeting of meetings) {
 
+            //Put all of the current meetings data into td elements
             const meetingRow = document.createElement("tr");
 
             const meetingIdData = document.createElement("td");
@@ -54,6 +58,7 @@
             const meetingTimeData = document.createElement("td");
             meetingTimeData.innerText = meeting.time;
 
+            //Append all tds to row, append row to table
             meetingRow.appendChild(meetingIdData);
             meetingRow.appendChild(meetingDescriptionData);
             meetingRow.appendChild(meetingPlaceData);
@@ -64,6 +69,7 @@
 
     }
 
+    //Render table on load
     renderMeetingTable();
 
 </script>

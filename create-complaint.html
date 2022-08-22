@@ -26,15 +26,19 @@
 </body>
 <script>
 
+    //Get needed element
     const inputDescription = document.getElementById("inputDescription");
 
     document.addEventListener("submit", async event => {
 
+        //Stop default event from happening
         event.preventDefault();
         
+        //get description from input and make a new complaint object
         const description = inputDescription.value;
         const complaint = {complaintId: 0, description, meeting: -1, status: "PENDING"};
 
+        //Send complaint post request to back end
         const responses = await fetch("http://localhost:8080/complaints", {
             method:"POST",
             body: JSON.stringify(complaint),
@@ -43,6 +47,7 @@
             }
         });
 
+        //Alert based on how things go
         if (responses.status === 201) {
             alert("Successfully created a complaint!");
             inputDescription.value = "";

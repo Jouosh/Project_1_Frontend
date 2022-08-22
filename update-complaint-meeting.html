@@ -46,13 +46,16 @@
 
 <script>
 
+    //Get needed elements to render tables
     const meetingTableBody = document.getElementById("meetingTableBody");
     const complaintTableBody = document.getElementById("complaintTableBody");
 
+    //Get needed elements to perform update
     const complaintIdInput = document.getElementById("complaintIdInput");
     const meetingIdInput = document.getElementById("meetingIdInput");
     const updateBtn = document.getElementById("updateBtn");
 
+    //gets all complaints from back end and returns
     async function getComplaints() {
         const httpResponse = await fetch("http://localhost:8080/complaints");
         const complaints = httpResponse.json();
@@ -61,10 +64,12 @@
 
     async function renderComplaintTable() {
 
+        //Get complaints and iterate through
         const complaints = await getComplaints();
 
         for (const complaint of complaints) {
 
+            //append all complaint data to row, append row to table
             const complaintRow = document.createElement("tr");
 
             const complaintIdData = document.createElement("td");
@@ -89,6 +94,7 @@
 
     }
 
+    //Gets all meetings from backend and returns
     async function getMeetings() {
         const httpResponse = await fetch("http://localhost:8080/meetings");
         const meetings = httpResponse.json();
@@ -97,10 +103,12 @@
 
     async function renderMeetingTable() {
 
+        //Get all meetings and iterate through
         const meetings = await getMeetings();
 
         for (const meeting of meetings) {
 
+            //Append all meeting data to row, append row to table
             const meetingRow = document.createElement("tr");
 
             const meetingIdData = document.createElement("td");
@@ -127,16 +135,19 @@
 
     updateBtn.addEventListener("click", async (event) => {
 
+        //Get complaint with the inputted id
         const complaintId = String(complaintIdInput.value);
         const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
 
+        //If complaint not found, iterate through and return
         if (httpGetResponse.status === 404) {
             alert("No complaint with id of " + complaintId + " exists.");
             return;
         }
 
+        //update meeting id of returned meeting, then put to back end
         complaint.meeting = meetingIdInput.value;
         const httpUpdateResponse = await fetch(complaintRoute, {
             method:"PUT",
@@ -146,6 +157,7 @@
             }
         });
 
+        //Alert that job is done, and reload for results
         alert("update complete");
         location.reload();
 

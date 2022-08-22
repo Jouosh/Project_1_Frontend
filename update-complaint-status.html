@@ -45,13 +45,16 @@
 
 <script>
 
+    //Get needed elements for rendering
     const complaintTableBody = document.getElementById("complaintTableBody");
     const complaintInputDatalist = document.getElementById("complaintInputDatalist");
 
+    //Get needed elements for updating
     const updateBtn = document.getElementById("updateBtn");
     const complaintIdInput = document.getElementById("complaintIdInput");
     const statusSelect = document.getElementById("statusSelect");
 
+    //Function to get all complaints from backend
     async function getComplaints() {
         const httpResponse = await fetch("http://localhost:8080/complaints");
         const complaints = httpResponse.json();
@@ -60,14 +63,17 @@
 
     async function renderComplaintTable() {
 
+        //store complaint then iterate through
         const complaints = await getComplaints();
 
         for (const complaint of complaints) {
 
+            //create an option for input, and append to datalist
             const complaintIdOption = document.createElement("option");
             complaintIdOption.value = complaint.complaintId;
             complaintInputDatalist.appendChild(complaintIdOption);
 
+            //get all complaint data into td, then append to row, append row to table
             const complaintRow = document.createElement("tr");
 
             const complaintIdData = document.createElement("td");
@@ -92,20 +98,24 @@
 
     }
 
+    //Render table on load
     renderComplaintTable();
 
     updateBtn.addEventListener("click", async (event) => {
 
+        //Get complaint with the inputted id
         const complaintId = String(complaintIdInput.value);
         const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
 
+        //If complaint not found, alert and return
         if (httpGetResponse.status === 404) {
             alert("No complaint with id of " + complaintId + " exists.");
             return;
         }
 
+        //Update status of complaint to match status selects value, then put to backend
         complaint.status = statusSelect.value;
         const httpUpdateResponse = await fetch(complaintRoute, {
             method:"PUT",
@@ -115,6 +125,7 @@
             }
         });
 
+        //Alert that the update was done, then reload the page to show results
         alert("update complete");
         location.reload();
 
