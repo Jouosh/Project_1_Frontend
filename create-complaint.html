@@ -35,7 +35,7 @@
         const description = inputDescription.value;
         const complaint = {complaintId: 0, description, meeting: -1, status: "PENDING"};
 
-        const responses = await fetch("http://localhost:8080/complaint", {
+        const responses = await fetch("http://localhost:8080/complaints", {
             method:"POST",
             body: JSON.stringify(complaint),
             headers: {

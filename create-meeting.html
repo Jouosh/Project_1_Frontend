@@ -46,7 +46,7 @@
 
         const meeting = {complaintId: 0, description, place, time};
 
-        const responses = await fetch("http://localhost:8080/meeting", {
+        const responses = await fetch("http://localhost:8080/meetings", {
             method:"POST",
             body: JSON.stringify(meeting),
             headers: {

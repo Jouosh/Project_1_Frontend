@@ -29,7 +29,7 @@
     const meetingTableBody = document.getElementById("meetingTableBody");
 
     async function getMeetings() {
-        const httpResponse = await fetch("http://localhost:8080/meeting");
+        const httpResponse = await fetch("http://localhost:8080/meetings");
         const meetings = httpResponse.json();
         return meetings;
     }

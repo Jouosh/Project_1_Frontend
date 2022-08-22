@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Update</title>
+
+</head>
+
+<body>
+
+    <h1>Update Your Complaints Status Here!</h1>
+
+    <lablel for = "complaintInputDatalist">Id like to set complaint number: </lablel>
+    <input type = "number" list = "complaintInputDatalist" />
+    <datalist id = "complaintInputDatalist">
+
+    </datalist>
+
+    <label for = "statusSelect">to the status: </label>
+    <select id = "statusSelect" name = "Status">
+        <option value = "IGNORED">Ignored</option>
+        <option value = "LOWPRIORITY">Low Priority</option>
+        <option value = "HIGHPRIORITY">High Priority</option>
+    </select>
+
+    <button id = "updateBtn">Submit</button>
+
+    <label for = "complaintTable">List of complaints</label>
+    <table id = "complaintTable">
+
+        <thead>
+            <tr><th>ID</th><th>Description</th><th>Meeting</th><th>Status</th></tr>
+        </thead>
+
+        <tbody id = "complaintTableBody">
+
+        </tbody>
+
+    </table>
+</body>
+
+<script>
+
+const complaintTableBody = document.getElementById("complaintTableBody");
+const complaintInputDatalist = document.getElementById("complaintInputDatalist");
+
+const updateBtn = document.getElementById("updateBtn");
+
+async function getComplaints() {
+    const httpResponse = await fetch("http://localhost:8080/complaints");
+    const complaints = httpResponse.json();
+    return complaints;
+}
+
+async function renderComplaintTable() {
+
+    const complaints = await getComplaints();
+
+    for (const complaint of complaints) {
+
+        const complaintIdOption = document.createElement("option");
+        complaintIdOption.value = complaint.complaintId;
+        complaintInputDatalist.appendChild(complaintIdOption);
+
+        const complaintRow = document.createElement("tr");
+
+        const complaintIdData = document.createElement("td");
+        complaintIdData.innerText = complaint.complaintId;
+
+        const complaintDescriptionData = document.createElement("td");
+        complaintDescriptionData.innerText = complaint.description;
+
+        const complaintMeetingData = document.createElement("td");
+        complaintMeetingData.innerText = complaint.meeting;
+
+        const complaintStatusData = document.createElement("td");
+        complaintStatusData.innerText = complaint.status;
+
+        complaintRow.appendChild(complaintIdData);
+        complaintRow.appendChild(complaintDescriptionData);
+        complaintRow.appendChild(complaintMeetingData);
+        complaintRow.appendChild(complaintStatusData);
+
+        complaintTableBody.appendChild(complaintRow);
+    }
+
+}
+
+renderComplaintTable();
+
+updateBtn.addEventListener("click", async (event) => {
+
+    
+
+});
+
+
+</script>
+</html>
