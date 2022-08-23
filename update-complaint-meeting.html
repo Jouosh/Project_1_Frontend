@@ -10,17 +10,15 @@
 
     <h1>Attach Meetings to Complaints Here</h1>
     
-    <label for = "complaintIdInput">I'd like to attach complaint: </label>
-    <input id = "complaintIdInput" type = "number" list = "complaintInputDatalist" />
-    <datalist id = "complaintInputDatalist">
+    <label for = "complaintIdSelect">I'd like to attach complaint: </label>
+    <select id = "complaintIdSelect">
+        <option value=0 selected disabled hidden>Select a complaint</option>
+    </select>
 
-    </datalist>
-
-    <label for = "meetingIdInput">To meeting: </label>
-    <input id = "meetingIdInput" type = "number" list = "meetingInputDatalist" />
-    <datalist id = "meetingInputDatalist">
-
-    </datalist>
+    <label for = "meetingIdSelect">To meeting: </label>
+    <select id = "meetingIdSelect">
+        <option value=0 selected disabled hidden>Select a meeting</option>
+    </select>
 
     <button id = "updateBtn">Submit</button>
 
@@ -56,9 +54,9 @@
 
     //Get needed elements to render tables
     const meetingTableBody = document.getElementById("meetingTableBody");
-    const meetingInputDatalist = document.getElementById("meetingInputDatalist");
+    const meetingIdSelect = document.getElementById("meetingIdSelect");
     const complaintTableBody = document.getElementById("complaintTableBody");
-    const complaintInputDatalist = document.getElementById("complaintInputDatalist");
+    const complaintIdSelect = document.getElementById("complaintIdSelect");
 
     //Get needed elements to perform update
     const complaintIdInput = document.getElementById("complaintIdInput");
@@ -82,7 +80,8 @@
             //create an option for input, and append to datalist
             const complaintIdOption = document.createElement("option");
             complaintIdOption.value = complaint.complaintId;
-            complaintInputDatalist.appendChild(complaintIdOption);
+            complaintIdOption.innerText = complaint.complaintId;
+            complaintIdSelect.appendChild(complaintIdOption);
 
             //append all complaint data to row, append row to table
             const complaintRow = document.createElement("tr");
@@ -126,7 +125,8 @@
             //create an option for input, and append to datalist
             const meetingIdOption = document.createElement("option");
             meetingIdOption.value = meeting.meetingId;
-            meetingInputDatalist.appendChild(meetingIdOption);
+            meetingIdOption.innerText = meeting.meetingId;
+            meetingIdSelect.appendChild(meetingIdOption);
 
             //Append all meeting data to row, append row to table
             const meetingRow = document.createElement("tr");
@@ -156,7 +156,7 @@
     updateBtn.addEventListener("click", async (event) => {
 
         //Get complaint with the inputted id
-        const complaintId = String(complaintIdInput.value);
+        const complaintId = String(complaintIdSelect.value);
         const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
@@ -168,7 +168,7 @@
         }
 
         //update meeting id of returned meeting, then put to back end
-        complaint.meeting = meetingIdInput.value;
+        complaint.meeting = meetingIdSelect.value;
         const httpUpdateResponse = await fetch(complaintRoute, {
             method:"PUT",
             body: JSON.stringify(complaint),

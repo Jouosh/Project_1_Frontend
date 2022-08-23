@@ -14,14 +14,14 @@
 
     <h1>Update Your Complaints Status Here!</h1>
 
-    <lablel for = "complaintIdInput">Id like to set complaint number: </lablel>
-    <input id = "complaintIdInput" type = "number" list = "complaintInputDatalist" />
-    <datalist id = "complaintInputDatalist">
-
-    </datalist>
+    <lablel for = "complaintIdSelect">Id like to set complaint number: </lablel>
+    <select id = "complaintIdSelect" name = "Complaints">
+        <option value=0 selected disabled hidden>Select a complaint</option>
+    </select>
 
     <label for = "statusSelect">to the status: </label>
     <select id = "statusSelect" name = "Status">
+        <option value=0 selected disabled hidden>Select a priority</option>
         <option value = "IGNORED">Ignored</option>
         <option value = "LOWPRIORITY">Low Priority</option>
         <option value = "HIGHPRIORITY">High Priority</option>
@@ -47,11 +47,10 @@
 
     //Get needed elements for rendering
     const complaintTableBody = document.getElementById("complaintTableBody");
-    const complaintInputDatalist = document.getElementById("complaintInputDatalist");
+    const complaintIdSelect = document.getElementById("complaintIdSelect");
 
     //Get needed elements for updating
     const updateBtn = document.getElementById("updateBtn");
-    const complaintIdInput = document.getElementById("complaintIdInput");
     const statusSelect = document.getElementById("statusSelect");
 
     //Function to get all complaints from backend
@@ -71,7 +70,8 @@
             //create an option for input, and append to datalist
             const complaintIdOption = document.createElement("option");
             complaintIdOption.value = complaint.complaintId;
-            complaintInputDatalist.appendChild(complaintIdOption);
+            complaintIdOption.innerText = complaint.complaintId;
+            complaintIdSelect.appendChild(complaintIdOption);
 
             //get all complaint data into td, then append to row, append row to table
             const complaintRow = document.createElement("tr");
@@ -103,8 +103,18 @@
 
     updateBtn.addEventListener("click", async (event) => {
 
+        if (complaintIdSelect.value == 0) {
+            alert("Please select a complaint");
+            return;
+        }
+
+        if (statusSelect.value == 0) {
+            alert("Please select a status");
+            return;
+        }
+
         //Get complaint with the inputted id
-        const complaintId = String(complaintIdInput.value);
+        const complaintId = String(complaintIdSelect.value);
         const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
