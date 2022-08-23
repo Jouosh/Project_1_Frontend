@@ -161,12 +161,6 @@
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
 
-        //If complaint not found, iterate through and return
-        if (httpGetResponse.status === 404) {
-            alert("No complaint with id of " + complaintId + " exists.");
-            return;
-        }
-
         //update meeting id of returned meeting, then put to back end
         complaint.meeting = meetingIdSelect.value;
         const httpUpdateResponse = await fetch(complaintRoute, {
