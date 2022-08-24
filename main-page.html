@@ -4,13 +4,82 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome To Terrible Town!</title>
+    <title>Welcome to Terrible Town!</title>
 </head>
 <body>
-    
-    <h1>Welcome!</h1>
-    <a href="constituent-main.html">I am a constituent</a>
-    <a href="council-main.html">I am a councilman</a>
 
+    <h1>Welcome!</h1>
+
+    <h2>Login</h2>
+
+    <form>
+        <fieldset>
+
+            <legend>Login</legend>
+
+            <label for = "usernameInput">Username</label>
+            <input id = "usernameInput" type = "text" placeholder = "jimmyL"/>
+
+            <label for="passwordInput">Password</label>
+            <input id="passwordInput" type="password" placeholder = "123"/>
+
+            <button>Submit</button>
+
+        </fieldset>
+    </form>
+
+    <label for = "guestBtn">Or</label>
+    <button id = "guestBtn">Continue as Guest</button>
+    
 </body>
+
+<script>
+
+    const usernameInput = document.getElementById("usernameInput");
+    const passwordInput = document.getElementById("passwordInput");
+    
+    const guestBtn = document.getElementById("guestBtn");
+
+    document.addEventListener("submit", async event => {
+
+        event.preventDefault();
+
+        const username = usernameInput.value;
+        const password = passwordInput.value;
+        const credentials = {username, password};
+
+        const httpResponse = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            body: JSON.stringify(credentials),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (httpResponse.status === 200) {
+            const townsperson = await httpResponse.json();
+            console.log(townsperson);
+            alert("Login Successful");
+            if (townsperson.role == "COUNCIL") {
+                window.location = "council-main.html";
+            } else {
+                window.location = "constituent-main.html";
+            }
+        }
+
+        if (httpResponse.status === 404) {
+            alert("username not found");
+        }
+
+        if (httpResponse.status === 400) {
+            alert("password does not match");
+        }
+
+    });
+
+    guestBtn.addEventListener("click", event => {
+        window.location = "constituent-main.html";
+    });
+
+</script>
 </html>
