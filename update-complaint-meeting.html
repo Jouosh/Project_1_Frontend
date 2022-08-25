@@ -41,7 +41,7 @@
     <table id = "meetingTable">
 
         <thead>
-            <tr><th>ID</th><th>Description</th><th>Place</th><th>time</th></tr>
+            <tr><th>ID</th><th>Description</th><th>Place</th><th>Time</th><th>Complaints attached</th></tr>
         </thead>
 
         <tbody id = "meetingTableBody">
@@ -69,7 +69,7 @@
 
     //gets all complaints from back end and returns
     async function getComplaints() {
-        const httpResponse = await fetch("http://localhost:8080/complaints");
+        const httpResponse = await fetch("http://localhost:1111/complaints");
         const complaints = httpResponse.json();
         return complaints;
     }
@@ -114,7 +114,7 @@
 
     //Gets all meetings from backend and returns
     async function getMeetings() {
-        const httpResponse = await fetch("http://localhost:8080/meetings");
+        const httpResponse = await fetch("http://localhost:1111/meetings");
         const meetings = httpResponse.json();
         return meetings;
     }
@@ -123,6 +123,7 @@
 
         //Get all meetings and iterate through
         const meetings = await getMeetings();
+        const complaints = await getComplaints();
 
         for (const meeting of meetings) {
 
@@ -145,12 +146,25 @@
             meetingPlaceData.innerText = meeting.place;
 
             const meetingTimeData = document.createElement("td");
-            meetingTimeData.innerText = meeting.time;
+            const meetingDate = new Date(meeting.time * 1000);
+            meetingTimeData.innerText = meetingDate.toLocaleString();
+
+            const meetingComplaintsData = document.createElement("td");
+            for (const complaint of complaints) {
+                if (complaint.meeting === meeting.meetingId) {
+                    if (meetingComplaintsData.innerText === "") {
+                        meetingComplaintsData.innerText += complaint.complaintId;
+                    } else {
+                        meetingComplaintsData.innerText += ", " + complaint.complaintId;
+                    }
+                }
+            }
 
             meetingRow.appendChild(meetingIdData);
             meetingRow.appendChild(meetingDescriptionData);
             meetingRow.appendChild(meetingPlaceData);
             meetingRow.appendChild(meetingTimeData);
+            meetingRow.appendChild(meetingComplaintsData);
 
             meetingTableBody.appendChild(meetingRow);
         }
@@ -161,7 +175,7 @@
 
         //Get complaint with the inputted id
         const complaintId = String(complaintIdSelect.value);
-        const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
+        const complaintRoute = "http://localhost:1111/complaints/" + complaintId;
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
 

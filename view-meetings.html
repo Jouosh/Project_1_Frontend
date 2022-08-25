@@ -34,7 +34,7 @@
 
     //Function for getting json of all meetings
     async function getMeetings() {
-        const httpResponse = await fetch("http://localhost:8080/meetings");
+        const httpResponse = await fetch("http://localhost:1111/meetings");
         const meetings = httpResponse.json();
         return meetings;
     }
@@ -59,7 +59,8 @@
             meetingPlaceData.innerText = meeting.place;
 
             const meetingTimeData = document.createElement("td");
-            meetingTimeData.innerText = meeting.time;
+            const meetingDate = new Date(meeting.time * 1000);
+            meetingTimeData.innerText = meetingDate.toLocaleString();
 
             //Append all tds to row, append row to table
             meetingRow.appendChild(meetingIdData);

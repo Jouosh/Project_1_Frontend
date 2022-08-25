@@ -42,7 +42,7 @@
         const complaint = {complaintId: 0, description, meeting: -1, status: "PENDING"};
 
         //Send complaint post request to back end
-        const responses = await fetch("http://localhost:8080/complaints", {
+        const responses = await fetch("http://localhost:1111/complaints", {
             method:"POST",
             body: JSON.stringify(complaint),
             headers: {

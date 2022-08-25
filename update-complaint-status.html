@@ -59,7 +59,7 @@
 
     //Function to get all complaints from backend
     async function getComplaints() {
-        const httpResponse = await fetch("http://localhost:8080/complaints");
+        const httpResponse = await fetch("http://localhost:1111/complaints");
         const complaints = httpResponse.json();
         return complaints;
     }
@@ -119,7 +119,7 @@
 
         //Get complaint with the inputted id
         const complaintId = String(complaintIdSelect.value);
-        const complaintRoute = "http://localhost:8080/complaints/" + complaintId;
+        const complaintRoute = "http://localhost:1111/complaints/" + complaintId;
         const httpGetResponse = await fetch(complaintRoute);
         const complaint = await httpGetResponse.json();
 

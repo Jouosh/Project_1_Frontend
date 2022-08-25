@@ -24,10 +24,14 @@
             <label for = "inputPlace">Place</label>
             <input id = "inputPlace" type = "text" required minlength = "5" maxlength="500"/>
 
+            <label for = "inputDate">Date</label>
+            <input id = "inputDate" type = "date" value = "2022-01-01"/>
+
             <label for = "inputTime">Time</label>
-            <input id = "inputTime" type = "number" required min = 0/>
+            <input id = "inputTime" type = "time" value = "00:00"/>
         </fieldset>
-        <button id>Submit</button>
+        <button>Submit</button>
+        <p id="statusOutput"></p>
     </form>
 
     <button onclick="history.back()">Go Back</button>
@@ -38,7 +42,9 @@
     //Get needed elements
     const inputDescription = document.getElementById("inputDescription");
     const inputPlace = document.getElementById("inputPlace");
+    const inputDate = document.getElementById("inputDate");
     const inputTime = document.getElementById("inputTime");
+    const statusOutput = document.getElementById("statusOutput");
 
     document.addEventListener("submit", async event => {
 
@@ -47,12 +53,18 @@
         //Put elements values into variables and make meeting object
         const description = inputDescription.value;
         const place = inputPlace.value;
-        const time = inputTime.value;
+        const fullDate = new Date(inputDate.value + " " + inputTime.value);
+        const epochTime = fullDate.getTime() / 1000.0;
 
-        const meeting = {complaintId: 0, description, place, time};
+        const meeting = {complaintId: 0, description, place, time: epochTime};
+
+        if (epochTime < (Date.now() / 1000)) {
+            statusOutput.innerText = "Meeting must be set to take place after now";
+            return;
+        }
 
         //Send post request to back end
-        const responses = await fetch("http://localhost:8080/meetings", {
+        const responses = await fetch("http://localhost:1111/meetings", {
             method:"POST",
             body: JSON.stringify(meeting),
             headers: {
@@ -62,12 +74,14 @@
 
         //Alert based on status of response
         if (responses.status === 201) {
-            alert("Successfully created a meeting!");
             inputDescription.value = "";
             inputPlace.value = "";
-            inputTime.value = "";
+            inputTime.value = "00:00";
+            inputDate.value = "2022-01-01";
+            statusOutput.innerText = "Meeting created!";
+
         } else {
-            alert("Something went wrong");
+            statusOutput.innerText = "Something went wrong";
         }
 
     });
