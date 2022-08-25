@@ -90,7 +90,12 @@
             complaintDescriptionData.innerText = complaint.description;
 
             const complaintMeetingData = document.createElement("td");
-            complaintMeetingData.innerText = complaint.meeting;
+            if (complaint.meeting === -1) {
+                console.log("Hello!")
+                complaintMeetingData.innerText = "UNASSIGNED";
+            } else {
+                complaintMeetingData.innerText = complaint.meeting;
+            }
 
             const complaintStatusData = document.createElement("td");
             complaintStatusData.innerText = complaint.status;
