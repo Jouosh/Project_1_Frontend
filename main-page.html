@@ -9,27 +9,25 @@
 </head>
 <body>
     
-    <h1>Welcome!</h1>
-
-    <h2>Login</h2>
+    <h1>Welcome to the Terrible Town Portal!</h1>
 
     <form>
         <fieldset>
 
-            <legend>Login</legend>
+            <legend>Login to continue</legend>
 
             <label for = "usernameInput">Username</label>
-            <input id = "usernameInput" type = "text" placeholder = "jimmyL"/>
+            <input id = "usernameInput" type = "text" placeholder = "username..."/>
 
             <label for="passwordInput">Password</label>
-            <input id="passwordInput" type="password" placeholder = "123"/>
-
-            <button>Submit</button>
+            <input id="passwordInput" type="password" placeholder = "password..."/>
 
         </fieldset>
+        <button>Submit</button>
+        <p id = "statusPara"></p>
     </form>
-
-    <label for = "guestBtn">Or</label>
+    <br>
+    <p>Or</p>
     <button id = "guestBtn">Continue as Guest</button>
     
 </body>
@@ -38,6 +36,7 @@
 
     const usernameInput = document.getElementById("usernameInput");
     const passwordInput = document.getElementById("passwordInput");
+    const statusPara = document.getElementById("statusPara");
     
     const guestBtn = document.getElementById("guestBtn");
 
@@ -60,7 +59,7 @@
         if (httpResponse.status === 200) {
             const townsperson = await httpResponse.json();
             console.log(townsperson);
-            alert("Login Successful");
+            statusPara.innerText = "Login Successful";
             if (townsperson.role == "COUNCIL") {
                 window.location = "council-main.html";
             } else {
@@ -69,11 +68,11 @@
         }
 
         if (httpResponse.status === 404) {
-            alert("username not found");
+            statusPara.innerText = "username not found";
         }
 
         if (httpResponse.status === 400) {
-            alert("password does not match");
+            statusPara.innerText = "password does not match";
         }
 
     });

@@ -6,9 +6,20 @@ body {
     line-height: 1.8;
 }
 
+a {
+    font-size: 25px;
+}
+
 form {
     background-color: #58a0c3;
     margin: 20px;
+    border-radius: 25px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+fieldset {
+    border-radius: 25px;
 }
 
 table {
@@ -17,4 +28,17 @@ table {
     margin-left: auto;
     margin-right: auto;
     border: 1px solid;
+    border-radius: 25px;
+}
+
+#statusPara {
+    color: red;
+    font-weight: bold;
+}
+
+.directoryDiv {
+    background-color: #58a0c3;
+    margin-left: 30%;
+    margin-right: 30%;
+    border-radius: 25px;
 }

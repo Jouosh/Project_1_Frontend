@@ -31,7 +31,7 @@
             <input id = "inputTime" type = "time" value = "00:00"/>
         </fieldset>
         <button>Submit</button>
-        <p id="statusOutput"></p>
+        <p id="statusPara"></p>
     </form>
 
     <button onclick="history.back()">Go Back</button>
@@ -44,7 +44,7 @@
     const inputPlace = document.getElementById("inputPlace");
     const inputDate = document.getElementById("inputDate");
     const inputTime = document.getElementById("inputTime");
-    const statusOutput = document.getElementById("statusOutput");
+    const statusPara = document.getElementById("statusPara");
 
     document.addEventListener("submit", async event => {
 
@@ -59,7 +59,7 @@
         const meeting = {complaintId: 0, description, place, time: epochTime};
 
         if (epochTime < (Date.now() / 1000)) {
-            statusOutput.innerText = "Meeting must be set to take place after now";
+            statusPara.innerText = "Meeting must be set to take place after now";
             return;
         }
 
@@ -78,10 +78,10 @@
             inputPlace.value = "";
             inputTime.value = "00:00";
             inputDate.value = "2022-01-01";
-            statusOutput.innerText = "Meeting created!";
+            statusPara.innerText = "Meeting created!";
 
         } else {
-            statusOutput.innerText = "Something went wrong";
+            statusPara.innerText = "Something went wrong";
         }
 
     });
