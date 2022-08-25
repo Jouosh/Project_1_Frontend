@@ -36,6 +36,11 @@ table {
     font-weight: bold;
 }
 
+textarea {
+    height: 80px;
+    width: 80%;
+}
+
 .directoryDiv {
     background-color: #58a0c3;
     margin-left: 30%;
