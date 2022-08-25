@@ -31,6 +31,10 @@ table {
     border-radius: 25px;
 }
 
+td {
+    padding: 10px;
+}
+
 #statusPara {
     color: red;
     font-weight: bold;
@@ -39,6 +43,11 @@ table {
 textarea {
     height: 80px;
     width: 80%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+input {
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 .directoryDiv {
