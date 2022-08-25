@@ -23,6 +23,7 @@
             <textarea id = "inputDescription" type = "text" required minlength = "5" maxlength="500"></textarea>
         </fieldset>
         <button id = "submitBtn">Submit</button>
+        <p id = "statusPara"></p>
     </form>
 
     <button onclick="history.back()">Go Back</button>
@@ -32,6 +33,7 @@
 
     //Get needed element
     const inputDescription = document.getElementById("inputDescription");
+    const statusPara = document.getElementById("statusPara");
 
     document.addEventListener("submit", async event => {
 
@@ -53,10 +55,10 @@
 
         //Alert based on how things go
         if (responses.status === 201) {
-            alert("Successfully created a complaint!");
+            statusPara.innerText = "Successfully created a complaint!";
             inputDescription.value = "";
         } else {
-            alert("Something went wrong");
+            statusPara.innerText = "Something went wrong";
         }
 
     });

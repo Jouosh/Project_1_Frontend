@@ -49,6 +49,7 @@
         </tbody>
 
     </table>
+    <p id="statusPara"></p>
 
     <button onclick="history.back()">Go Back</button>
 
@@ -66,6 +67,7 @@
     const complaintIdInput = document.getElementById("complaintIdInput");
     const meetingIdInput = document.getElementById("meetingIdInput");
     const updateBtn = document.getElementById("updateBtn");
+    const statusPara = document.getElementById("statusPara");
 
     //gets all complaints from back end and returns
     async function getComplaints() {
@@ -97,7 +99,12 @@
             complaintDescriptionData.innerText = complaint.description;
 
             const complaintMeetingData = document.createElement("td");
-            complaintMeetingData.innerText = complaint.meeting;
+            if (complaint.meeting === -1) {
+                console.log("Hello!")
+                complaintMeetingData.innerText = "UNASSIGNED";
+            } else {
+                complaintMeetingData.innerText = complaint.meeting;
+            }
 
             const complaintStatusData = document.createElement("td");
             complaintStatusData.innerText = complaint.status;
@@ -173,6 +180,16 @@
 
     updateBtn.addEventListener("click", async (event) => {
 
+        if (complaintIdSelect.value == 0) {
+            statusPara.innerText = "Please select a complaint";
+            return;
+        }
+
+        if (meetingIdSelect.value == 0) {
+            statusPara.innerText = "Please select a meeting";
+            return;
+        }
+
         //Get complaint with the inputted id
         const complaintId = String(complaintIdSelect.value);
         const complaintRoute = "http://localhost:1111/complaints/" + complaintId;
@@ -190,7 +207,7 @@
         });
 
         //Alert that job is done, and reload for results
-        alert("update complete");
+        statusPara.innerText = "update complete";
         location.reload();
 
     });
