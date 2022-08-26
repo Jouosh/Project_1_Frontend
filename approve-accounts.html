@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles.css" rel="stylesheet">
+    <title>Account Approval</title>
+</head>
+<body>
+    
+    <h1>Approve Accounts Here!</h1>
+
+    <label for = "accountIdSelect">I'd like to approve account </label>
+    <select id = "accountIdSelect">
+        <option value=0 selected disabled hidden>Select an account</option>
+    </select>
+    <br>
+
+    <label for= "unapprovedTable">List of unapproved accounts</label>
+    <table id = "unapprovedTable">
+
+        <thead>
+            <tr><td>id</td><td>Username</td><td>Role</td></tr>
+        </thead>
+
+        <tbody id = "unapprovedTableBody">
+
+        </tbody>
+
+    </table>
+
+    <label for= "approvedTable">List of approved accounts</label>
+    <table id = "approvedTable">
+
+        <thead>
+            <tr><td>id</td><td>Username</td><td>Role</td></tr>
+        </thead>
+
+        <tbody id = "approvedTableBody">
+
+        </tbody>
+
+    </table>
+
+</body>
+<script>
+
+    const unapprovedTableBody = document.getElementById("unapprovedTableBody");
+    const approvedTableBody = document.getElementById("approvedTableBody");
+    const accountIdSelect = document.getElementById("accountIdSelect");
+
+    async function getTownspeopleByApproval(approved) {
+        const httpResponse = await fetch(`http://localhost:8080/townspeople/${approved}`);
+        const townspeople = httpResponse.json();
+        return townspeople;
+        console.log(httpResponse);
+        console.log(townspeople);
+    }
+
+    async function renderUnapprovedTable() {
+        const townspeople = await getTownspeopleByApproval(false);
+
+        for (townsperson of townspeople) {
+
+            const townspersonIdOption = document.createElement("option");
+            townspersonIdOption.value = townsperson.townId;
+            townspersonIdOption.innerText = townsperson.townId;
+            accountIdSelect.appendChild(townspersonIdOption);
+
+            const townspersonRow = document.createElement("tr");
+
+            const townspersonIdData = document.createElement("td");
+            townspersonIdData.innerText = townsperson.townId;
+
+            const townspersonUserData = document.createElement("td");
+            townspersonUserData.innerText = townsperson.username;
+
+            const townspersonRoleData = document.createElement("td");
+            townspersonRoleData.innerText = townsperson.role;
+
+            townspersonRow.appendChild(townspersonIdData);
+            townspersonRow.appendChild(townspersonUserData);
+            townspersonRow.appendChild(townspersonRoleData);
+            unapprovedTableBody.appendChild(townspersonRow);
+        }
+    }
+
+    async function renderApprovedTable() {
+        const townspeople = await getTownspeopleByApproval(true);
+
+        for (townsperson of townspeople) {
+
+            const townspersonRow = document.createElement("tr");
+
+            const townspersonIdData = document.createElement("td");
+            townspersonIdData.innerText = townsperson.townId;
+
+            const townspersonUserData = document.createElement("td");
+            townspersonUserData.innerText = townsperson.username;
+
+            const townspersonRoleData = document.createElement("td");
+            townspersonRoleData.innerText = townsperson.role;
+
+            townspersonRow.appendChild(townspersonIdData);
+            townspersonRow.appendChild(townspersonUserData);
+            townspersonRow.appendChild(townspersonRoleData);
+            approvedTableBody.appendChild(townspersonRow);
+
+        }
+
+    }
+
+    renderUnapprovedTable();
+    renderApprovedTable();
+
+</script>
+</html>
