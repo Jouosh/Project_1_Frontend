@@ -28,7 +28,12 @@
     </form>
     <br>
     <p>Or</p>
-    <button id = "guestBtn">Continue as Guest</button>
+    <br>
+    <button id = "requestBtn">Request An Account</button>
+    <br>
+    <p>Or</p>
+    <br>
+    <button id = "guestBtn">Continue As Guest</button>
     
 </body>
 
@@ -39,6 +44,7 @@
     const statusPara = document.getElementById("statusPara");
     
     const guestBtn = document.getElementById("guestBtn");
+    const requestBtn = document.getElementById("requestBtn");
 
     document.addEventListener("submit", async event => {
 
@@ -58,7 +64,12 @@
 
         if (httpResponse.status === 200) {
             const townsperson = await httpResponse.json();
-            console.log(townsperson);
+            
+            if (townsperson.approved === false) {
+                statusPara.innerText = "Your account has not been approved yet. Please try again later.";
+                return;
+            }
+
             statusPara.innerText = "Login Successful";
             if (townsperson.role == "COUNCIL") {
                 window.location = "council-main.html";
@@ -79,6 +90,10 @@
 
     guestBtn.addEventListener("click", event => {
         window.location = "constituent-main.html";
+    });
+
+    requestBtn.addEventListener("click", event => {
+        window.location = "request-account.html";
     });
 
 </script>

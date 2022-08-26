@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles.css" rel="stylesheet">
+    <title>Requester</title>
+</head>
+<body>
+    
+    <h1>Request an account here</h1>
+
+    <form action="" method = "post">
+        <fieldset>
+            <legend>Input your desired account credentials</legend>
+
+            <label for = "inputUser">Username</label>
+            <input id = "inputUser" type = "text" required minlength = "4" maxlength = "20"/>
+
+            <label for = "inputPass">Password</label>
+            <input id = "inputPass" type = "password" required minlength = "4" maxlength = "20"/>
+
+            <label for = "inputPassConfirm">Confirm Password</label>
+            <input id = "inputPassConfirm" type = "password" required minlength = "4" maxlength = "20"/>
+        </fieldset>
+        <button>Submit</button>
+        <p id = statusPara></p>
+    </form>
+
+    <button onclick="history.back()">Go Back</button>
+
+</body>
+<script>
+
+    //get needed elements
+    const inputUser = document.getElementById("inputUser");
+    const inputPass = document.getElementById("inputPass");
+    const inputPassConfirm = document.getElementById("inputPassConfirm");
+    const statusPara = document.getElementById("statusPara");
+
+    document.addEventListener("submit", async event => {
+
+        event.preventDefault();
+
+        const username = inputUser.value;
+        const password = inputPass.value;
+        const passConfirm = inputPassConfirm.value;
+
+        const townsperson = {username, password, role: "CONSTITUENT", apporved: false};
+
+        if (password != passConfirm) {
+            statusPara.innerText = "password and password confirmation do not match";
+            return;
+        }
+
+        const httpResponse = await fetch("http://localhost:8080/townspeople", {
+            method: "POST",
+            body: JSON.stringify(townsperson),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (httpResponse.status === 201) {
+            statusPara.innerText = "Account request created. Once approved, you may use it to log in"
+        }
+        else if (httpResponse.status === 400) {
+            statusPara.innerText = `The username ${username} is already taken. Please choose a different name.`;
+        }        
+
+    });
+
+</script>
+</html>
