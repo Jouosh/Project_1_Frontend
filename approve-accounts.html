@@ -15,6 +15,7 @@
     <select id = "accountIdSelect">
         <option value=0 selected disabled hidden>Select an account</option>
     </select>
+    <button id = "updateBtn">Submit</button>
     <br>
 
     <label for= "unapprovedTable">List of unapproved accounts</label>
@@ -42,6 +43,7 @@
         </tbody>
 
     </table>
+    <p id="statusPara"></p>
 
 </body>
 <script>
@@ -50,8 +52,10 @@
     const approvedTableBody = document.getElementById("approvedTableBody");
     const accountIdSelect = document.getElementById("accountIdSelect");
 
+    const updateBtn = document.getElementById("updateBtn");
+
     async function getTownspeopleByApproval(approved) {
-        const httpResponse = await fetch(`http://localhost:8080/townspeople/${approved}`);
+        const httpResponse = await fetch(`http://localhost:1111/townspeople/${approved}/approval`);
         const townspeople = httpResponse.json();
         return townspeople;
         console.log(httpResponse);
@@ -64,7 +68,7 @@
         for (townsperson of townspeople) {
 
             const townspersonIdOption = document.createElement("option");
-            townspersonIdOption.value = townsperson.townId;
+            townspersonIdOption.value = townsperson.username;
             townspersonIdOption.innerText = townsperson.townId;
             accountIdSelect.appendChild(townspersonIdOption);
 
@@ -110,6 +114,35 @@
         }
 
     }
+
+    updateBtn.addEventListener("click", async event => {
+        
+        //Make sure somethings been selected
+        if (accountIdSelect.value == 0) {
+            statusPara.innerText = "Please select an account";
+            return;
+        }
+
+        //Get selected townsperson from database
+        const townspersonUsername = accountIdSelect.value;
+        const httpResponse = await fetch(`http://localhost:1111/townspeople/${townspersonUsername}/username`);
+        const townsperson = await httpResponse.json();
+
+        //Update selected townsperson
+        townsperson.approved = true;
+        const httpUpdateResponse = await fetch(`http://localhost:1111/townspeople/${townsperson.townId}`, {
+            method:"PUT",
+            body: JSON.stringify(townsperson),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        //Alert that job is done, and reload for results
+        statusPara.innerText = "update complete";
+        location.reload();
+
+    });
 
     renderUnapprovedTable();
     renderApprovedTable();
